@@ -196,3 +196,51 @@ def omniglot(path, n_tasks, n_classes, is_rotation=True, train=15):
 		_count += 1
 
 	return tr_images_list, tr_labels_list, te_images_list, te_labels_list
+
+def fivedatasets_python(data_path, group=1, validation=False, val_ratio=0.2, flat=False, one_hot=True):
+	n_classes = 50
+
+	files = open(data_path, 'rb')
+	dict = pickle.load(files, encoding='bytes')
+
+	# NOTE Image Standardization
+	images = (dict['data'])
+	images = np.float32(images)
+	labels = dict['fine_labels']
+
+	sort_l = np.sort(labels)
+	argsort_l = np.argsort(labels)
+
+	train_split = []
+	val_split = []
+	prv_position = 0
+	# If group=10, [10, 20, 30, ..., 100]
+	for idx in range(group, n_classes+1, group):
+		position = sort_l.tolist().index(idx) if idx < n_classes else len(sort_l)
+		print('range : [%d,%d]'%(prv_position, position))
+		gimages = np.take(images,argsort_l[prv_position:position], axis=0)
+		if not flat:
+			gimages = gimages.reshape([gimages.shape[0], 32, 32, 3])
+			#gimages = tf.image.per_image_standardization(gimages)
+
+
+		glabels = np.take(labels,argsort_l[prv_position:position])
+		if one_hot:
+			# NOTE Edit label id to be in [0,9]. Each of task is a 10 classes problem.
+
+			glabels = np.eye(group)[glabels-(idx-10)]
+
+		pairs = list(zip(gimages, glabels))
+		random.shuffle(pairs)
+		#gimages, glabels = zip(*pairs)
+		if validation:
+			spl = int(len(pairs)*(1-val_ratio))
+			train_split.append(pairs[:spl])
+			val_split.append(pairs[spl:])
+
+		else:
+			train_split.append(pairs)
+		prv_position = position
+
+	output = (train_split, val_split) if validation else train_split
+	return output
