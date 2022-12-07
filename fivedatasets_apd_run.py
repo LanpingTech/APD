@@ -47,8 +47,8 @@ params = dict()
 assign_list = [ [], [], [], [] ]
 cent_list = []
 if FLAGS.data_type == 'default':
-	train_data, val_data = data_loader.fivedatasets_python('data/Five_data/five_dataset_train.pkl', group=FLAGS.n_classes, validation=True)
-	test_data = data_loader.fivedatasets_python('./data/Five_data/five_dataset_test.pkl', group=FLAGS.n_classes)
+	train_data, val_data = data_loader.fivedatasets_python('data/five_dataset_train.pkl', group=FLAGS.n_classes, validation=True)
+	test_data = data_loader.fivedatasets_python('./data/five_dataset_test.pkl', group=FLAGS.n_classes)
 
 	FLAGS.task_order= {
 			'orderA': [0, 1, 2, 3, 4]}

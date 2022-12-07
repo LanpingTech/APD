@@ -42,6 +42,16 @@ __CIFAR-100-Superclass__ experiment
 $ python cifar100_sup_apd_bash.py
 ```
 
+__Five-Datasets-Split__ experiment
+
+Five datasets are CIFAR-10, MNIST, SVHN, Fashion-MNIST, and notMNIST.
+
+The dataset is downloaded from [here](https://pan.baidu.com/s/1SP5U4wi0aP9f2MR21aL2zQ?pwd=5a59)
+```
+# 10 classes & 5 tasks, APD(2) which includes hierarchical knowledge consolidation
+$ python fivedatasets_apd_bash.py
+```
+
 
 ## Authors
 
